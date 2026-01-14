@@ -4,73 +4,78 @@ class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xFFD8B4E2), // Lilac
-        title: const Text(
-          'Biscoin',
-          style: TextStyle(
-            color: Colors.grey,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        centerTitle: true,
-        elevation: 0,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(24),
+Widget build(BuildContext context) {
+  return Scaffold(
+    body: SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.all(20),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(height: 40),
 
-            const Text(
-              'Login',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-              ),
+            // App name
+            Text(
+              'Biscoin',
+              style: Theme.of(context).textTheme.headlineMedium,
             ),
 
-            const SizedBox(height: 32),
+            const SizedBox(height: 8),
 
-            _inputField(
-              label: 'Phone Number',
-              icon: Icons.phone,
+            // Intro text
+            Text(
+              'Manage your business smartly',
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+
+            const SizedBox(height: 40),
+
+            // Email
+            TextField(
+              decoration: const InputDecoration(
+                hintText: 'Email',
+              ),
             ),
 
             const SizedBox(height: 16),
 
-            _inputField(
-              label: 'Password',
-              icon: Icons.lock,
+            // Password
+            TextField(
               obscureText: true,
+              decoration: const InputDecoration(
+                hintText: 'Password',
+              ),
             ),
 
-            const SizedBox(height: 32),
+            const SizedBox(height: 28),
 
-            _primaryButton(
-              label: 'Login',
-              onTap: () {
-                // Navigation will be wired later
-              },
+            // Login button
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  // KEEP YOUR EXISTING LOGIN LOGIC HERE
+                },
+                child: const Text('Login'),
+              ),
             ),
 
-            const SizedBox(height: 12),
+            const SizedBox(height: 16),
 
-            _secondaryButton(
-              label: 'Sign Up',
-              onTap: () {
-                // Navigate to Register screen later
+            // Register link
+            TextButton(
+              onPressed: () {
+                // Navigator to Register screen
               },
+              child: const Text('Create an account'),
             ),
           ],
         ),
       ),
-    );
-  }
+    ),
+  );
+}
+
 
   // 🔹 SMALL ROUNDED TEXT FIELD
   Widget _inputField({

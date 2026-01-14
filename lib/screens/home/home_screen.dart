@@ -16,109 +16,131 @@ class HomeScreen extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Biscoin')),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Welcome',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 24),
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      title: const Text('Biscoin'),
+    ),
+    body: SingleChildScrollView(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 12),
 
-            const Text(
-              'Quick Actions',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: 16),
+          // 👋 Welcome section
+          Text(
+            'Welcome 👋',
+            style: Theme.of(context).textTheme.headlineMedium,
+          ),
 
-            Row(
-              children: [
-                Expanded(
-                  child: _actionCard(
-                    icon: Icons.add_box,
-                    label: 'Add Product',
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) =>
-                              AddProductScreen(),
-                        ),
-                      );
-                    },
-                  ),
+          const SizedBox(height: 6),
+
+          Text(
+            'Manage your business easily',
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+
+          const SizedBox(height: 30),
+
+          // 🔹 Quick actions title
+          Text(
+            'Quick Actions',
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  fontWeight: FontWeight.w600,
                 ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: _actionCard(
-                    icon: Icons.bar_chart,
-                    label: 'View Sales',
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) =>  SalesScreen(),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ],
-            ),
+          ),
 
-            const SizedBox(height: 16),
+          const SizedBox(height: 16),
 
-            Row(
-              children: [
-                Expanded(
-                  child: _actionCard(
-                    icon: Icons.credit_card,
-                    label: 'Manage Debts',
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const DebtsScreen(),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
+          // 🧩 Action cards grid
+          GridView.count(
+            crossAxisCount: 2,
+            crossAxisSpacing: 16,
+            mainAxisSpacing: 16,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            children: [
+              _actionCard(
+                context,
+                icon: Icons.add_box_rounded,
+                label: 'Add Product',
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => AddProductScreen(),
+                    ),
+                  );
+                },
+              ),
+              _actionCard(
+                context,
+                icon: Icons.bar_chart_rounded,
+                label: 'View Sales',
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => SalesScreen(),
+                    ),
+                  );
+                },
+              ),
+              _actionCard(
+                context,
+                icon: Icons.credit_card_rounded,
+                label: 'Manage Debts',
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const DebtsScreen(),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        ],
       ),
-    );
-  }
+    ),
+  );
+}
 
-  Widget _actionCard({
-    required IconData icon,
-    required String label,
-    required VoidCallback onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        height: 120,
-        decoration: BoxDecoration(
-          color: Colors.blue.shade50,
-          borderRadius: BorderRadius.circular(16),
-        ),
+
+  // 🟣 MODERN ACTION CARD (UI ONLY)
+  Widget _actionCard(
+  BuildContext context, {
+  required IconData icon,
+  required String label,
+  required VoidCallback onTap,
+}) {
+  return GestureDetector(
+    onTap: onTap,
+    child: Card(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 24),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, size: 40, color: Colors.blue),
-            const SizedBox(height: 12),
-            Text(label, style: const TextStyle(fontWeight: FontWeight.w600)),
+            Icon(
+              icon,
+              size: 42,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            const SizedBox(height: 14),
+            Text(
+              label,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+            ),
           ],
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 }

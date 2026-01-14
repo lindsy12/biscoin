@@ -18,17 +18,20 @@ class _AddProductScreenState extends State<AddProductScreen> {
   final ProductService _dbService = ProductService();
 
   void _saveProduct() async {
-    final product = Product(
-      name: _nameController.text,
-      stock: int.parse(_stockController.text),
-      price: double.parse(_priceController.text),
-      cost: double.parse(_costController.text),
-    );
+  final product = Product(
+    name: _nameController.text,
+    stock: int.parse(_stockController.text),
+    price: double.parse(_priceController.text),
+    cost: double.parse(_costController.text),
+  );
 
-    await _dbService.insertProduct(product);
+  await _dbService.insertProduct(product);
 
-    Navigator.pop(context);
-  }
+  if (!mounted) return; // ✅ FIX: protects context
+
+  Navigator.pop(context);
+}
+
 
   @override
   Widget build(BuildContext context) {
