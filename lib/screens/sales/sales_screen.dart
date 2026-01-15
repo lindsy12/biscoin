@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../models/sale_model.dart';
 import '../../services/sale_service.dart';
+import '../../ui/gradient_background.dart';
 
 class SalesScreen extends StatelessWidget {
   SalesScreen({super.key});
@@ -10,88 +11,102 @@ class SalesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
-        title: const Text('Sales'),
+  backgroundColor: Colors.transparent,
+  elevation: 0,
+  surfaceTintColor: Colors.transparent, // ⭐ IMPORTANT
+  shadowColor: Colors.transparent,      // ⭐ IMPORTANT
+  title: ShaderMask(
+    shaderCallback: (bounds) {
+      return const LinearGradient(
+        colors: [
+          Color(0xFF8E7AFE), // soft purple
+          Color(0xFFC7BFFF), // lighter lilac
+        ],
+      ).createShader(bounds);
+    },
+    child: const Text(
+      'Sales',
+      style: TextStyle(
+        color: Colors.white, // required for ShaderMask
+        fontWeight: FontWeight.w600,
       ),
-      body: FutureBuilder<List<Sale>>(
-        future: _saleService.getAllSales(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
+    ),
+  ),
+  centerTitle: true,
+),
 
-          if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return _emptyState();
-          }
+      body: GradientBackground(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: FutureBuilder<List<Sale>>(
+            future: _saleService.getAllSales(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return const Center(
+                  child: CircularProgressIndicator(color: Colors.white),
+                );
+              }
 
-          final sales = snapshot.data!;
+              final sales = snapshot.data!;
+              final totalSales = sales.fold<double>(
+                0,
+                (sum, s) => sum + s.totalAmount,
+              );
+              final totalProfit = sales.fold<double>(
+                0,
+                (sum, s) => sum + s.profit,
+              );
 
-          final double totalSales = sales.fold(
-            0,
-            (sum, s) => sum + s.totalAmount,
-          );
-
-          final double totalProfit = sales.fold(
-            0,
-            (sum, s) => sum + s.profit,
-          );
-
-          return Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // 🔹 Summary cards
-                Row(
-                  children: [
-                    Expanded(
-                      child: _summaryCard(
-                        title: 'Total Sales',
-                        value: '₦${totalSales.toStringAsFixed(0)}',
-                        icon: Icons.payments,
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // 🔹 SUMMARY CARDS
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _summaryCard(
+                          title: 'Total Sales',
+                          value: '₦${totalSales.toStringAsFixed(0)}',
+                          icon: Icons.payments,
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: _summaryCard(
-                        title: 'Total Profit',
-                        value: '₦${totalProfit.toStringAsFixed(0)}',
-                        icon: Icons.trending_up,
-                        highlight: true,
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: _summaryCard(
+                          title: 'Total Profit',
+                          value: '₦${totalProfit.toStringAsFixed(0)}',
+                          icon: Icons.trending_up,
+                          highlight: true,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-
-                const SizedBox(height: 24),
-
-                const Text(
-                  'Sales History',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
+                    ],
                   ),
-                ),
 
-                const SizedBox(height: 12),
+                  const SizedBox(height: 24),
 
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: sales.length,
-                    itemBuilder: (context, index) {
-                      return _saleTile(sales[index]);
-                    },
+                  // 🔹 SALES LIST
+                  Expanded(
+                    child: sales.isEmpty
+                        ? _emptyState()
+                        : ListView.builder(
+                            itemCount: sales.length,
+                            itemBuilder: (context, index) {
+                              return _saleTile(sales[index]);
+                            },
+                          ),
                   ),
-                ),
-              ],
-            ),
-          );
-        },
+                ],
+              );
+            },
+          ),
+        ),
       ),
     );
   }
 
-  // 🔹 Summary card
+  // 🟣 Summary Card
   Widget _summaryCard({
     required String title,
     required String value,
@@ -117,10 +132,7 @@ class SalesScreen extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    color: Colors.grey,
-                  ),
+                  style: const TextStyle(fontSize: 13, color: Colors.grey),
                 ),
                 const SizedBox(height: 4),
                 Text(
@@ -138,7 +150,7 @@ class SalesScreen extends StatelessWidget {
     );
   }
 
-  // 🔹 Sale item tile
+  // 🧾 Sale Tile
   Widget _saleTile(Sale sale) {
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
@@ -166,7 +178,6 @@ class SalesScreen extends StatelessWidget {
     );
   }
 
-  // 🔹 Empty state
   Widget _emptyState() {
     return Center(
       child: Column(
@@ -175,7 +186,7 @@ class SalesScreen extends StatelessWidget {
           Icon(
             Icons.bar_chart_outlined,
             size: 80,
-            color: Colors.grey.shade400,
+            color: Colors.white.withValues(alpha: 0.5),
           ),
           const SizedBox(height: 16),
           const Text(
@@ -183,12 +194,8 @@ class SalesScreen extends StatelessWidget {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
+              color: Colors.white,
             ),
-          ),
-          const SizedBox(height: 6),
-          const Text(
-            'Record sales to see reports here',
-            style: TextStyle(color: Colors.grey),
           ),
         ],
       ),

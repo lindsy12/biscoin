@@ -33,40 +33,43 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
 
     return Scaffold(
       body: screens[_currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-  currentIndex: _currentIndex,
-  onTap: (index) {
-    setState(() {
-      _currentIndex = index;
-    });
-  },
-  type: BottomNavigationBarType.fixed,
-  selectedItemColor: const Color(0xFF8E7AFE), // lilac
-  unselectedItemColor: Colors.grey,
-  selectedLabelStyle: const TextStyle(
-    fontWeight: FontWeight.w600,
+      bottomNavigationBar: Container(
+  decoration: const BoxDecoration(
+    gradient: LinearGradient(
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+      colors: [
+        Color(0xFF1B1748),
+        Color(0xFF3A2E7D),
+      ],
+    ),
   ),
-  unselectedLabelStyle: const TextStyle(
-    fontWeight: FontWeight.w500,
+  child: BottomNavigationBar(
+    backgroundColor: Colors.transparent,
+    elevation: 0,
+    currentIndex: _currentIndex,
+    onTap: (index) {
+      setState(() => _currentIndex = index);
+    },
+    selectedItemColor: Color.fromARGB(255, 250, 122, 254), // 💜 active purple
+    unselectedItemColor: Colors.white70,
+    items: const [
+      BottomNavigationBarItem(
+        icon: Icon(Icons.notifications),
+        label: 'Alerts',
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.inventory),
+        label: 'Products',
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.home),
+        label: 'Home',
+      ),
+    ],
   ),
-  items: const [
-    BottomNavigationBarItem(
-      icon: Icon(Icons.notifications_outlined),
-      activeIcon: Icon(Icons.notifications),
-      label: 'Alerts',
-    ),
-    BottomNavigationBarItem(
-      icon: Icon(Icons.inventory_2_outlined),
-      activeIcon: Icon(Icons.inventory_2),
-      label: 'Products',
-    ),
-    BottomNavigationBarItem(
-      icon: Icon(Icons.home_outlined),
-      activeIcon: Icon(Icons.home),
-      label: 'Home',
-    ),
-  ],
 ),
+
 
     );
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../models/debt_model.dart';
 import '../../services/debt_service.dart';
+import '../../ui/gradient_background.dart';
 
 class DebtsScreen extends StatefulWidget {
   const DebtsScreen({super.key});
@@ -15,30 +16,43 @@ class _DebtsScreenState extends State<DebtsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.transparent,
+
       appBar: AppBar(
-        title: const Text('Debts'),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: const Text(
+          'Debts',
+          style: TextStyle(color: Colors.white),
+        ),
+        centerTitle: true,
       ),
-      body: FutureBuilder<List<Debt>>(
-        future: _debtService.getUnpaidDebts(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
 
-          if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return _emptyState();
-          }
+      body: GradientBackground(
+        child: FutureBuilder<List<Debt>>(
+          future: _debtService.getUnpaidDebts(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(color: Colors.white),
+              );
+            }
 
-          final debts = snapshot.data!;
+            if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return _emptyState();
+            }
 
-          return ListView.builder(
-            padding: const EdgeInsets.all(16),
-            itemCount: debts.length,
-            itemBuilder: (context, index) {
-              return _debtCard(debts[index]);
-            },
-          );
-        },
+            final debts = snapshot.data!;
+
+            return ListView.builder(
+              padding: const EdgeInsets.all(16),
+              itemCount: debts.length,
+              itemBuilder: (context, index) {
+                return _debtCard(debts[index]);
+              },
+            );
+          },
+        ),
       ),
     );
   }
@@ -49,9 +63,8 @@ class _DebtsScreenState extends State<DebtsScreen> {
       margin: const EdgeInsets.only(bottom: 12),
       child: ListTile(
         leading: CircleAvatar(
-          backgroundColor: debt.isPaid
-              ? Colors.green.shade100
-              : Colors.red.shade100,
+          backgroundColor:
+              debt.isPaid ? Colors.green.shade100 : Colors.red.shade100,
           child: Icon(
             debt.isPaid ? Icons.check : Icons.warning,
             color: debt.isPaid ? Colors.green : Colors.red,
@@ -92,7 +105,7 @@ class _DebtsScreenState extends State<DebtsScreen> {
           Icon(
             Icons.credit_card_off,
             size: 80,
-            color: Colors.grey.shade400,
+            color: Colors.white.withOpacity(0.7),
           ),
           const SizedBox(height: 16),
           const Text(
@@ -100,12 +113,13 @@ class _DebtsScreenState extends State<DebtsScreen> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
+              color: Colors.white,
             ),
           ),
           const SizedBox(height: 6),
           const Text(
             'Customer debts will appear here',
-            style: TextStyle(color: Colors.grey),
+            style: TextStyle(color: Colors.white70),
           ),
         ],
       ),

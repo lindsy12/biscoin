@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../home/main_navigation_screen.dart';
+
 
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});
@@ -73,7 +75,12 @@ Widget build(BuildContext context) {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  // KEEP YOUR EXISTING REGISTER LOGIC HERE
+                 Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (_) => const MainNavigationScreen(),
+      ),
+    ); // KEEP YOUR EXISTING REGISTER LOGIC HERE
                 },
                 child: const Text('Create Account'),
               ),

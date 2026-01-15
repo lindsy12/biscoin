@@ -1,148 +1,108 @@
 import 'package:flutter/material.dart';
+import '../../ui/gradient_background.dart';
+import '../home/main_navigation_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
   @override
-Widget build(BuildContext context) {
-  return Scaffold(
-    body: SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const SizedBox(height: 40),
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: GradientBackground(
+        child: Center(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 28),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // 🟣 App Name
+                  const Text(
+                    'Biscoin',
+                    style: TextStyle(
+                      fontSize: 40,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.2,
+                      color: Color.fromARGB(255, 88, 40, 150),
+                      fontFamily: 'Poppins',
+                    ),
+                  ),
 
-            // App name
-            Text(
-              'Biscoin',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
+                  const SizedBox(height: 14),
 
-            const SizedBox(height: 8),
+                  // ✨ Tagline (BIGGER & ENERGETIC)
+                  const Text(
+                    'Your business, simplified',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 20, // ⬆ increased
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white70,
+                      fontFamily: 'Poppins',
+                    ),
+                  ),
 
-            // Intro text
-            Text(
-              'Manage your business smartly',
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
+                  const SizedBox(height: 48),
 
-            const SizedBox(height: 40),
+                  // 📧 Email
+                  TextField(
+                    decoration: InputDecoration(
+                      hintText: 'Email',
+                      prefixIcon: const Icon(Icons.email_outlined),
+                    ),
+                  ),
 
-            // Email
-            TextField(
-              decoration: const InputDecoration(
-                hintText: 'Email',
+                  const SizedBox(height: 16),
+
+                  // 🔒 Password
+                  TextField(
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      hintText: 'Password',
+                      prefixIcon: const Icon(Icons.lock_outline),
+                    ),
+                  ),
+
+                  const SizedBox(height: 28),
+
+                  // 🔘 Login Button
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const MainNavigationScreen(),
+                          ),
+                        );
+                      },
+                      child: const Text('Login'),
+                    ),
+                  ),
+
+                  const SizedBox(height: 18),
+
+                  // ➕ Register link
+                  TextButton(
+                    onPressed: () {
+                      // navigate to register later
+                    },
+                    child: const Text(
+                      'Create an account',
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 238, 64, 223),
+                        fontFamily: 'Poppins',
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-
-            const SizedBox(height: 16),
-
-            // Password
-            TextField(
-              obscureText: true,
-              decoration: const InputDecoration(
-                hintText: 'Password',
-              ),
-            ),
-
-            const SizedBox(height: 28),
-
-            // Login button
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  // KEEP YOUR EXISTING LOGIN LOGIC HERE
-                },
-                child: const Text('Login'),
-              ),
-            ),
-
-            const SizedBox(height: 16),
-
-            // Register link
-            TextButton(
-              onPressed: () {
-                // Navigator to Register screen
-              },
-              child: const Text('Create an account'),
-            ),
-          ],
-        ),
-      ),
-    ),
-  );
-}
-
-
-  // 🔹 SMALL ROUNDED TEXT FIELD
-  Widget _inputField({
-    required String label,
-    required IconData icon,
-    bool obscureText = false,
-  }) {
-    return TextField(
-      obscureText: obscureText,
-      decoration: InputDecoration(
-        labelText: label,
-        prefixIcon: Icon(icon),
-        isDense: true,
-        contentPadding:
-            const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(20),
-          borderSide: BorderSide(color: Colors.grey.shade400),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(20),
-          borderSide: const BorderSide(color: Colors.purple),
-        ),
-      ),
-    );
-  }
-
-  // 🟣 PRIMARY BUTTON (PURPLE)
-  Widget _primaryButton({
-    required String label,
-    required VoidCallback onTap,
-  }) {
-    return SizedBox(
-      height: 42,
-      child: ElevatedButton(
-        onPressed: onTap,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.purple,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
           ),
         ),
-        child: Text(label),
-      ),
-    );
-  }
-
-  // ⚪ SECONDARY BUTTON (OUTLINED)
-  Widget _secondaryButton({
-    required String label,
-    required VoidCallback onTap,
-  }) {
-    return SizedBox(
-      height: 42,
-      child: OutlinedButton(
-        onPressed: onTap,
-        style: OutlinedButton.styleFrom(
-          foregroundColor: Colors.purple,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          side: const BorderSide(color: Colors.purple),
-        ),
-        child: Text(label),
       ),
     );
   }
